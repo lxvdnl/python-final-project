@@ -8,11 +8,13 @@ x-airflow-common: &airflow-common
     AIRFLOW__CORE__LOAD_EXAMPLES: "False"
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "True"
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://project_user:project_password@postgres:5432/project_db
+    AIRFLOW_CONN_POSTGRES_DEFAULT: postgresql://project_user:project_password@postgres:5432/project_db
     AIRFLOW__CORE__FERNET_KEY: ""
     AIRFLOW__WEBSERVER__SECRET_KEY: "secret_key"
     PYTHONPATH: /opt/airflow
   volumes:
     - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/scripts:/opt/airflow/scripts
     - ./sql:/opt/airflow/sql
     - ./data:/opt/airflow/data
   depends_on:
@@ -31,6 +33,7 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./sql/init:/docker-entrypoint-initdb.d
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U project_user -d project_db"]
       interval: 10s
@@ -45,6 +48,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
       - "5050:80"
+    volumes:
+    - ./pgadmin/servers.json:/pgadmin4/servers.json
     depends_on:
       - postgres
 
