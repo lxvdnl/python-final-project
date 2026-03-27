@@ -67,6 +67,10 @@ load_normalized_data
 
 quality_checks
 
+orders_datamart
+
+items_datamart
+
 ##  Описание DAG-ов
 ### load_normalized_data
 Загружает исходные parquet-файлы, преобразует данные и записывает их в нормализованные таблицы PostgreSQL.

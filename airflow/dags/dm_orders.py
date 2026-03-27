@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
-from scripts.datamart import run_orders_datamart
+from scripts.dm_orders import run_orders_datamart
 
 
 with DAG(
@@ -17,7 +17,7 @@ with DAG(
         "retries": 1,
         "retry_delay": timedelta(minutes=5),
     },
-    tags=["datamart", "spark"],
+    tags=["order_datamart", "spark"],
 ) as dag:
 
     build_orders_datamart = PythonOperator(

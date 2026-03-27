@@ -102,7 +102,6 @@ CREATE INDEX IF NOT EXISTS idx_delivery_assignments_current ON delivery_assignme
 
 
 
-
 create table if not exists orders_datamart (
     order_id int primary key,
     user_id int not null,
@@ -150,3 +149,21 @@ ON orders_datamart (status);
 
 CREATE INDEX idx_orders_dm_user 
 ON orders_datamart (user_id);
+
+
+create table if not exists items_datamart (
+    store_id int not null,
+    item_category varchar(100),
+    item_id int not null,
+    item_title varchar(255),
+    item_cash_flows numeric(14,2),
+    ordered_qty int,
+    canceled_qty int,
+    orders_cnt int,
+    orders_with_canceled_items int,
+    year int,
+    month int,
+    day int,
+    city varchar(100),
+    primary key (store_id, item_id, year, month, day, city)
+);

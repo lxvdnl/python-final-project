@@ -76,15 +76,15 @@ def run_orders_datamart():
         )
         .agg(
             spark_sum(
-                col("item_quantity") * col("item_price") * (1 - col("item_discount")/100)
+                (col("item_quantity") * col("item_price") * (1 - col("item_discount")/100)) * (1 - col("order_discount")/100)
             ).alias("cash_flows"),
 
             spark_sum(
                 when(col("status") == "canceled", 0)
                 .otherwise(
-                    (col("item_quantity") - col("item_canceled_quantity"))
+                    ((col("item_quantity") - col("item_canceled_quantity"))
                     * col("item_price")
-                    * (1 - col("item_discount")/100)
+                    * (1 - col("item_discount")/100)) * (1 - col("order_discount")/100)
                 )
             ).alias("revenue")
         )
