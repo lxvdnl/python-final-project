@@ -97,3 +97,56 @@ CREATE TABLE IF NOT EXISTS delivery_assignments (
 CREATE INDEX IF NOT EXISTS idx_delivery_assignments_order_id ON delivery_assignments(order_id);
 CREATE INDEX IF NOT EXISTS idx_delivery_assignments_driver_id ON delivery_assignments(driver_id);
 CREATE INDEX IF NOT EXISTS idx_delivery_assignments_current ON delivery_assignments(order_id) WHERE unassigned_at IS NULL;
+
+
+
+
+
+
+create table if not exists orders_datamart (
+    order_id int primary key,
+    user_id int not null,
+    store_id int not null,
+
+    driver_id int,
+
+    -- деньги
+    cash_flows numeric(14,2), -- оборот
+    revenue numeric(14,2),    -- выручка
+
+    -- статусы
+    status varchar(20),
+    order_cancellation_reason varchar(100),
+
+    -- флаги
+    is_cancel_error int,
+    is_cancel_after_delivery int,
+
+    -- разрезы
+    city varchar(100),
+    year int,
+    month int,
+    day int
+);
+
+
+
+
+CREATE INDEX idx_orders_dm_date 
+ON orders_datamart (year, month, day);
+
+
+CREATE INDEX idx_orders_dm_store 
+ON orders_datamart (store_id);
+
+
+CREATE INDEX idx_orders_dm_city 
+ON orders_datamart (city);
+
+
+CREATE INDEX idx_orders_dm_status 
+ON orders_datamart (status);
+
+
+CREATE INDEX idx_orders_dm_user 
+ON orders_datamart (user_id);
